@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Inventario</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Código de Producto</th>
+          <th>Nombre del Producto</th>
+          <th>Cantidad</th>
+        </tr>
+      </thead>
+      <tbody id="inventory-body">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const inventory = [
+      { date: "2024-09-23", code: "P001", name: "Producto A", quantity: 10 },
+      { date: "2024-09-22", code: "P002", name: "Producto B", quantity: 15 }
+    ];
+
+    const tableBody = document.getElementById('inventory-body');
+
+    function renderInventory() {
+      tableBody.innerHTML = "";
+      inventory.forEach(item => {
+        const row = `<tr>
+          <td>${item.date}</td>
+          <td>${item.code}</td>
+          <td>${item.name}</td>
+          <td>${item.quantity}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    renderInventory();
+  </script>
+</body>
+</html>
