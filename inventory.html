@@ -9,6 +9,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-bottom: 20px;
     }
     table, th, td {
       border: 1px solid black;
@@ -21,6 +22,13 @@
       width: 90%;
       margin: 0 auto;
       margin-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+    }
+    button {
+      cursor: pointer;
     }
   </style>
 </head>
@@ -39,30 +47,81 @@
       <tbody id="inventory-body">
       </tbody>
     </table>
+
+    <h2>Agregar nuevo producto</h2>
+    <form id="add-product-form">
+      <input type="text" id="product-date" placeholder="Fecha (YYYY-MM-DD)" required>
+      <input type="text" id="product-code" placeholder="Código de Producto" required>
+      <input type="text" id="product-name" placeholder="Nombre del Producto" required>
+      <input type="number" id="product-quantity" placeholder="Cantidad" required>
+      <button type="submit">Agregar Producto</button>
+    </form>
   </div>
 
   <script>
-    const inventory = [
-      { date: "2024-09-23", code: "P001", name: "Producto A", quantity: 10 },
-      { date: "2024-09-22", code: "P002", name: "Producto B", quantity: 15 }
-    ];
+    // URL del backend en PythonAnywhere
+    const backendUrl = 'https://freddyjesus0.pythonanywhere.com/inventory';
 
-    const tableBody = document.getElementById('inventory-body');
+    // Función para obtener el inventario del backend
+    async function fetchInventory() {
+      const response = await fetch(backendUrl);
+      const inventory = await response.json();
 
-    function renderInventory() {
-      tableBody.innerHTML = "";
+      const tableBody = document.getElementById('inventory-body');
+      tableBody.innerHTML = "";  // Limpiar la tabla antes de agregar nuevos datos
+
+      // Llenar la tabla con los datos del inventario
       inventory.forEach(item => {
         const row = `<tr>
-          <td>${item.date}</td>
-          <td>${item.code}</td>
-          <td>${item.name}</td>
-          <td>${item.quantity}</td>
-        </tr>`;
+                      <td>${item.fecha}</td>
+                      <td>${item.codigo}</td>
+                      <td>${item.nombre}</td>
+                      <td>${item.cantidad}</td>
+                    </tr>`;
         tableBody.innerHTML += row;
       });
     }
 
-    renderInventory();
+    // Llamar a la función para mostrar el inventario al cargar la página
+    fetchInventory();
+
+    // Función para agregar un nuevo producto al inventario
+    async function addProduct(event) {
+      event.preventDefault();
+
+      // Obtener los valores del formulario
+      const date = document.getElementById('product-date').value;
+      const code = document.getElementById('product-code').value;
+      const name = document.getElementById('product-name').value;
+      const quantity = document.getElementById('product-quantity').value;
+
+      // Crear el objeto del nuevo producto
+      const newProduct = {
+        fecha: date,
+        codigo: code,
+        nombre: name,
+        cantidad: parseInt(quantity)
+      };
+
+      // Hacer una petición POST al backend
+      const response = await fetch(backendUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newProduct)
+      });
+
+      if (response.ok) {
+        alert('Producto agregado con éxito!');
+        fetchInventory();  // Actualizar la tabla con el nuevo producto
+      } else {
+        alert('Error al agregar el producto.');
+      }
+    }
+
+    // Agregar evento al formulario para manejar la petición POST
+    document.getElementById('add-product-form').addEventListener('submit', addProduct);
   </script>
 </body>
 </html>
