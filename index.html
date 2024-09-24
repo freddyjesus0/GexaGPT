@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de sesión</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .login-container {
+      width: 300px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      margin-top: 100px;
+    }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Inicio de sesión</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+    <div id="error-message" style="color: red;"></div>
+  </div>
+
+  <script>
+    const users = [
+      { username: "admin", password: "admin123" },
+      { username: "user1", password: "password1" }
+    ];
+
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      
+      const user = users.find(user => user.username === username && user.password === password);
+
+      if (user) {
+        window.location.href = "inventory.html";
+      } else {
+        document.getElementById("error-message").textContent = "Usuario o contraseña incorrectos.";
+      }
+    });
+  </script>
+</body>
+</html>
